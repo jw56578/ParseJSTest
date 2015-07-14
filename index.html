@@ -19,8 +19,38 @@
                }
             });
         }
-      </script>
-      <script>
+
+        function removeSpecificNestedChildFromArrayOfExistingParent(){
+         var query = new Parse.Query("Team");
+            query.include("members");
+            query.get('6BQlmEQG9R',{
+               success: function(result) { 
+                console.log(result);
+                console.log(result.get('members')[0]);
+                   var members = result.get('members');
+                   window.testarray = members;
+                   window.test = result.get('members')[0];
+                  // result.remove('members',[window.test]);
+                   //result.save();
+                    // alter the fav array here with normal Javascript
+                    // then update the user object
+                   //members.splice(0,1);
+                    //result.set('members',members);
+                    //result.save();
+                   
+                   
+                   
+                   
+               },
+               error: function(error) { 
+
+               }
+            });
+            
+            
+        }
+          
+    
         //saving one new object at a time
           function saveOneNewObject(){
             var TestObject = Parse.Object.extend("TestObject");
@@ -29,8 +59,7 @@
              // alert("yay! it worked");
             });
           }
-      </script>
-      <script>
+    
           //https://parse.com/questions/fetch-an-array-of-objects
         //retrieve one type of object and then include nested object children
         //HOW DO YOU ADD NESTED children??
@@ -50,11 +79,7 @@
             });
         }
       
-      </script>
-      
-      
-      
-        <script>
+   
             //adding objects that are part of a relationship
             //is this one to one?
             //https://www.parse.com/questions/how-can-i-add-objects-to-a-relation
@@ -91,14 +116,12 @@
             
             
 
-        </script>
       
-      <script>
       //https://www.parse.com/questions/how-can-i-add-two-objects-to-an-array-using-the-javascriptsdk-without-saving-twice
         //how to add objects to another objects array/pointer property
         //this is based on creating a new parent object, you could also just get an already existing parent object
           //whoops, this doesn't work for pointer type colum n
-        function saveNewParentObjectWithNewNestedChildren(){
+        function saveNewParentObjectWithNewNestedChildrenPointer(){
             var Team = Parse.Object.extend("Team");
             var Player = Parse.Object.extend("Player");
             var team1 = new Team();
@@ -107,10 +130,10 @@
                 function(team){
                     var s1 = new Player();
                     s1.set("username", 'player1');
-                    team.add("members", s1);
+                    team.add("members3", s1);
                     var s2 = new Player();
                     s2.set("username", 'player2');
-                    team.add("members", s2);
+                    team.add("members3", s2);
                     team.save().then(function(obj){
                         console.log(obj);
                     },
@@ -124,6 +147,65 @@
 
             );
         }
+          
+        //https://www.parse.com/questions/javascript-api-set-and-create-pointer
+        //this technique is fragile as I don't want to have to get existing objects in order to set them
+        function saveNewParentObjectWithNewNestedChildPointer(){
+            var Roster =Parse.Object.extend("Roster");
+            var Team = Parse.Object.extend("Team");
+            var Player = Parse.Object.extend("Player");
+            var roster = new Roster();
+            roster.save().then(
+                function(r){
+                    var s1 = new Player();
+                    s1.set("username", 'player1');
+                    r.set("player", s1);
+                    var s2 = new Team();
+                    s2.set("Name", 'team thingy');
+                    r.set("team", s2);
+                    r.save().then(function(obj){
+                        console.log(obj);
+                    },
+                    function(obj, error){
+                        console.log(error);
+                    });
+                },
+                function(obj, error){
+                    console.log(error);
+                }
+
+            );
+        }
+          
+          
+          //http://stackoverflow.com/questions/21884418/parse-com-selecting-from-join-table
+          function getObjectWithRelatedObjectsByJoinTable(){
+            var Team = Parse.Object.extend("Team");
+            var Roster = Parse.Object.extend("Roster");
+              var Player = Parse.Object.extend("Player");
+              
+            var teamQuery = new Parse.Query(Team);
+              var playerQuery = new Parse.Query(Player);
+            var query = new Parse.Query(Roster);
+              
+            playerQuery.equalTo("objectId", 'TIRdivWg5W'); 
+            query.matchesQuery("team", teamQuery);
+            query.matchesQuery("player",playerQuery);
+            query.include("team");
+            query.include("player");
+            query.find({});
+          
+          
+          }
+          
+          //you only have to make a new instance of any type and assign the id in order to manipulate it
+          //you don't have to actually get the object from the api first
+          function deleteExistingObjectWithoutHavingToGetIt(){
+            var Roster = Parse.Object.extend("Roster");
+            var r = new Roster();
+              r.id = 'idWoUG4z6l';
+              r.destroy();
+          }
       </script>
 
     <script>
@@ -132,8 +214,15 @@
 
        // findWithNestedChildren();
         //saveOneNewObject();
-        //saveNewParentObjectWithNewNestedChildren();
-        getWithNestedChildren();
+        //saveNewParentObjectWithNewNestedChildrenArray();
+        //getWithNestedChildren();
+        //removeSpecificNestedChildFromArrayOfExistingParent();
+        
+       // saveNewParentObjectWithNewNestedChildrenPointer();NO idea how this works
+       // getObjectWithRelatedObjectsByJoinTable();
+        //saveNewParentObjectWithNewNestedChildPointer();
+        
+        deleteExistingObjectWithoutHavingToGetIt();
 
     </script>
       
