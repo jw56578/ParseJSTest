@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body> 
+    <script src="//www.parsecdn.com/js/parse-1.5.0.min.js"></script>
+    <script>
+      Parse.initialize("3LTfRppRmRFEM6SpRWUx9b7PvSstlFx9YLKSqpAY", "e3L8i0BiPCXCI3v7gehtknYX4c8nmv0mz577q7c8");
+      </script>
+      <script>
+        //saving one new object at a time
+        var TestObject = Parse.Object.extend("TestObject");
+        var testObject = new TestObject();
+        testObject.save({foo: "bar"}).then(function(object) {
+         // alert("yay! it worked");
+        });
+      </script>
+      <script>
+          //https://parse.com/questions/fetch-an-array-of-objects
+        //retrieve one type of object and then include nested object children
+        //HOW DO YOU ADD NESTED children??
+        var query = new Parse.Query("Team");
+        query.include("members"); // retrieve nested object in query results
+       // query.include("myPointerColumn.subNestedPointerColumnName"); // if your nested object has a further nested object you want
+        //query.include("myArrayOfPointersColumn");  // will retrieve all nested objects in the array
+        query.find({
+           success: function(results) { 
+            console.log(results);
+           },
+           error: function(error) { 
+           
+           }
+        });
+      
+      </script>
+      
+      
+      
+        <script>
+            //adding objects that are part of a relationship
+            //is this one to one?
+            //https://www.parse.com/questions/how-can-i-add-objects-to-a-relation
+            //Uncaught You can't add an unsaved Parse.Object to a relation.
+            
+            /*
+            var Team = Parse.Object.extend("Team");
+            var Player = Parse.Object.extend("Player");
+            var team1 = new Team();
+            team1.set("Name", "Testing a team relation");
+            team1.save().then(
+                function(team){
+                    var relation = team1.relation("members2");
+                    var s1 = new Player();
+                    s1.set("username", 'player1');
+                    relation.add( s1);
+                    var s2 = new Player();
+                    s2.set("username", 'player2');
+                    relation.add( s2);
+                    team.save().then(function(obj){
+                        console.log(obj);
+                    },
+                    function(obj, error){
+                        console.log(error);
+                    });
+                },
+                function(obj, error){
+                    console.log(error);
+                }
+
+            );
+            */
+            
+            
+            
+
+        </script>
+      
+      <script>
+      //https://www.parse.com/questions/how-can-i-add-two-objects-to-an-array-using-the-javascriptsdk-without-saving-twice
+        //how to add objects to another objects array/pointer property
+        //this is based on creating a new parent object, you could also just get an already existing parent object
+          //whoops, this doesn't work for pointer type colum n
+        
+        var Team = Parse.Object.extend("Team");
+        var Player = Parse.Object.extend("Player");
+        var team1 = new Team();
+        team1.set("Name", "Team 1 is Awesome");
+        team1.save().then(
+            function(team){
+                var s1 = new Player();
+                s1.set("username", 'player1');
+                team.add("members", s1);
+                var s2 = new Player();
+                s2.set("username", 'player2');
+                team.add("members", s2);
+                team.save().then(function(obj){
+                    console.log(obj);
+                },
+                function(obj, error){
+                    console.log(error);
+                });
+            },
+            function(obj, error){
+                console.log(error);
+            }
+
+        );
+          
+      </script>
+      
+  </body>
+
+</html>  
+
