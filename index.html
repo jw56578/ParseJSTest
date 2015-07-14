@@ -121,7 +121,7 @@
         //how to add objects to another objects array/pointer property
         //this is based on creating a new parent object, you could also just get an already existing parent object
           //whoops, this doesn't work for pointer type colum n
-        function saveNewParentObjectWithNewNestedChildrenPointer(){
+    function saveNewParentObjectWithNewNestedChildrenArray(){
             var Team = Parse.Object.extend("Team");
             var Player = Parse.Object.extend("Player");
             var team1 = new Team();
@@ -130,10 +130,10 @@
                 function(team){
                     var s1 = new Player();
                     s1.set("username", 'player1');
-                    team.add("members3", s1);
+                    team.add("members", s1);
                     var s2 = new Player();
                     s2.set("username", 'player2');
-                    team.add("members3", s2);
+                    team.add("members", s2);
                     team.save().then(function(obj){
                         console.log(obj);
                     },
@@ -214,7 +214,7 @@
 
        // findWithNestedChildren();
         //saveOneNewObject();
-        //saveNewParentObjectWithNewNestedChildrenArray();
+        saveNewParentObjectWithNewNestedChildrenArray();
         //getWithNestedChildren();
         //removeSpecificNestedChildFromArrayOfExistingParent();
         
@@ -222,7 +222,7 @@
        // getObjectWithRelatedObjectsByJoinTable();
         //saveNewParentObjectWithNewNestedChildPointer();
         
-        deleteExistingObjectWithoutHavingToGetIt();
+        //deleteExistingObjectWithoutHavingToGetIt();
 
     </script>
       
