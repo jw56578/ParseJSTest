@@ -4,6 +4,7 @@
   </head>
   <body> 
     <script src="//www.parsecdn.com/js/parse-1.5.0.min.js"></script>
+      <script src="http://momentjs.com/downloads/moment.js"></script>
 
       <script>
           //https://parse.com/docs/js/api/symbols/Parse.Query.html
@@ -206,6 +207,34 @@
               r.id = 'idWoUG4z6l';
               r.destroy();
           }
+          
+          //It was not obvious how to access the actual value of a property that was of parse Date type
+          function displayDateType(){
+            var query = new Parse.Query("Team");
+            query.get('6BQlmEQG9R',{
+               success: function(results) { 
+                   //the built in createAt date and such are just there, but custom columns are all weird
+                console.log(results.createdAt);
+                console.log(results.get('TheDate'));
+                console.log("iso: " + results.get('TheDate').toISOString());
+                console.log(results.get('TheDate').toLocaleTimeString());
+                console.log(results.get('TheDate').toString());
+                console.log(results.get('TheDate').toLocaleDateString());
+                   var format = moment(results.get('TheDate'),"YYYY-MM-DD HH:mm");
+                   console.log(format);
+                   console.log(format.format());
+                   format = moment(results.get('TheDate').toISOString(),"YYYY-MM-DD HH:mm");
+                   console.log(format);
+                   console.log(format.format());
+                   
+               },
+               error: function(error) { 
+
+               }
+            });
+        }
+          
+          
       </script>
 
     <script>
@@ -214,7 +243,7 @@
 
        // findWithNestedChildren();
         //saveOneNewObject();
-        saveNewParentObjectWithNewNestedChildrenArray();
+        //saveNewParentObjectWithNewNestedChildrenArray();
         //getWithNestedChildren();
         //removeSpecificNestedChildFromArrayOfExistingParent();
         
@@ -223,6 +252,7 @@
         //saveNewParentObjectWithNewNestedChildPointer();
         
         //deleteExistingObjectWithoutHavingToGetIt();
+        displayDateType();
 
     </script>
       
